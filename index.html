@@ -1,0 +1,650 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slavik's Mods</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: 'Inter', Arial, sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .logo-container {
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: scale(0.5);
+      animation: fadeInZoom 1.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    }
+
+    .logo {
+      max-width: 500px;
+      height: auto;
+      filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.15));
+    }
+
+    @keyframes fadeInZoom {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .scroll-arrow {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    .scroll-arrow.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .scroll-arrow.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 20px);
+    }
+
+    .scroll-arrow svg {
+      width: 40px;
+      height: 40px;
+      color: rgba(255, 255, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .scroll-arrow:hover svg {
+      color: rgba(255, 255, 255, 0.8);
+      transform: translateY(5px);
+    }
+
+    .features {
+      min-height: 70vh;
+      background: linear-gradient(to bottom, #000 0%, #111 100%);
+      padding: 120px 0 200px 0;
+    }
+
+    .features h2 {
+      font-size: 3em;
+      margin-bottom: 80px;
+      background: linear-gradient(135deg, #fff 0%, #a8a8a8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: -1px;
+    }
+
+    .feature-status-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin: 0 auto 60px auto;
+    }
+
+    .feature-status-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 32px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .feature-status-item .name {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+      font-size: 1.1em;
+    }
+
+    .status-badge {
+      padding: 8px 16px;
+      border-radius: 24px;
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
+    .status-ready {
+      background: rgba(76, 175, 80, 0.15);
+      color: #4CAF50;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+
+    .status-working {
+      background: rgba(33, 150, 243, 0.15);
+      color: #2196F3;
+      border: 1px solid rgba(33, 150, 243, 0.2);
+    }
+
+    .status-almost {
+      background: rgba(255, 152, 0, 0.15);
+      color: #FF9800;
+      border: 1px solid rgba(255, 152, 0, 0.2);
+    }
+
+    .status-canceled {
+      background: rgba(244, 67, 54, 0.15);
+      color: #F44336;
+      border: 1px solid rgba(244, 67, 54, 0.2);
+    }
+
+    .feature-info {
+      position: relative;
+      margin-left: 10px;
+      cursor: help;
+    }
+
+    .info-icon {
+      width: 18px;
+      height: 18px;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+      fill: white;
+      stroke: black;
+      stroke-width: 30;
+      position: relative;
+      top: 3px;
+    }
+
+    .feature-info:hover .info-icon {
+      opacity: 1;
+    }
+
+    .feature-tooltip {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 10px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 15px 20px;
+      border-radius: 8px;
+      width: 280px;
+      z-index: 100;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .feature-info:hover .feature-tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .feature-tooltip-list {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0 0;
+    }
+
+    .feature-tooltip-list li {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9em;
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .feature-tooltip-list li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #2196F3;
+    }
+
+    .feature-tooltip::after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 12px;
+      height: 12px;
+      background: rgba(0, 0, 0, 0.9);
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .feature-grid,
+    .feature-card {
+      display: none;
+    }
+
+    .progress {
+      background: rgba(255, 255, 255, 0.1);
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .progress-bar {
+      width: 95%;
+      height: 100%;
+      background: linear-gradient(90deg, #2196F3, #00BCD4);
+      animation: progressAnim 2s ease-out;
+    }
+
+    @keyframes progressAnim {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 95%;
+      }
+    }
+
+    .progress span {
+      display: block;
+      font-size: 0.9em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 10px;
+    }
+
+    .coming-soon {
+      opacity: 0.7;
+    }
+
+    .coming-soon .feature-icon {
+      color: #757575;
+    }
+
+    .mobile-message {
+      display: none;
+      text-align: center;
+      font-size: 1.2em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      animation: fadeIn 1s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .scroll-arrow,
+      .features {
+        display: none;
+      }
+
+      .mobile-message {
+        display: block;
+      }
+
+      .hero {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo-container {
+        margin-bottom: 20px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .logo {
+        max-width: 80vw;
+      }
+
+      .feature-tooltip {
+        width: 220px;
+        left: auto;
+        right: 0;
+        transform: none;
+      }
+
+      .feature-tooltip::after {
+        left: auto;
+        right: 10px;
+      }
+
+      .features {
+        padding: 60px 20px;
+      }
+
+      .feature-status-list {
+        padding: 0 20px;
+        margin-bottom: 40px;
+      }
+
+      .feature-status-item {
+        padding: 12px 16px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .social-links {
+        right: 30px;
+        bottom: 30px;
+      }
+    }
+
+    @media (aspect-ratio: 1/1) {
+      .hero {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .logo-container {
+        margin-bottom: 0;
+      }
+
+      .logo {
+        max-width: 80vw;
+        height: auto;
+      }
+
+      .scroll-arrow,
+      .features,
+      .mobile-message {
+        display: none;
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    /* Arrow styling */
+    .arrow.fade-out {
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    .arrow.fade-in {
+      opacity: 0.7;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    .additional-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      opacity: 0;
+      animation: popIn 1.5s ease-out forwards 0.9s;
+      text-align: center;
+      background: linear-gradient(90deg, #fff, #eee);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .mods-container {
+      width: 80%;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      color: white;
+    }
+
+    .mods-container h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #fff, #eee);
+      -webkit-background-clip: text;
+      color: transparent;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .mod-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      border-radius: 10px;
+      background-color: rgba(30, 30, 30, 0.8);
+      margin-bottom: 15px;
+    }
+
+    .mod-item p {
+      font-size: 1.2rem;
+    }
+
+    .download-button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .download-button:hover {
+      background-color: #367c39;
+    }
+
+    .download-button svg {
+      width: 20px;
+      height: 20px;
+      margin-left: 8px;
+      fill: white;
+    }
+
+    .more-mods {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #fff, #eee);
+      -webkit-background-clip: text;
+      color: transparent;
+      text-align: center;
+      margin-bottom: 30px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hero">
+    <div class="container">
+      <div class="logo-container">
+        <h1 style="font-family: 'Space Grotesk', sans-serif;
+          font-size: 3.5rem;
+          font-weight: 700;
+          text-align: center;
+          margin-bottom: 30px;">
+          <span style="
+          background: linear-gradient(90deg, #ff0, #ffa500);
+          -webkit-background-clip: text;
+          color: transparent;">Slavik's</span>
+          <span style="
+          background: linear-gradient(90deg, #007bff, #00ffff);
+          -webkit-background-clip: text;
+          color: transparent;">Mods</span>
+        </h1>
+        <div class="additional-text" style="
+          background: linear-gradient(90deg, #fff, #eee);
+          -webkit-background-clip: text;
+          color: transparent;">
+          Mediocre coder, making simple and fun mods for minecraft.
+        </div>
+      </div>
+
+      <div class="scroll-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M5 12l7 7 7-7" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <section class="features">
+    <div class="container">
+      <h2>Mods</h2>
+      <div class="feature-status-list">
+        <div class="feature-status-item">
+          <div style="display: flex; align-items: center;">
+            <span class="name">No Combat Cooldown</span>
+            <div class="feature-info">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="info-icon">
+                <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" />
+                <path d="M12 7 L12 13 M12 17 L12 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                <path
+                  d="M12 7C11.7238 7 11.4805 7.10973 11.2929 7.29289C11.1054 7.47606 11 7.72386 11 8C11 8.27614 11.1054 8.52394 11.2929 8.70711C11.4805 8.89027 11.7238 9 12 9C12.2761 9 12.5195 8.89027 12.7071 8.70711C12.8946 8.52394 13 8.27614 13 8C13 7.72386 12.8946 7.47606 12.7071 7.29289C12.5195 7.10973 12.2761 7 12 7Z"
+                  fill="black" />
+                <path d="M12 13L12 17" stroke="black" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              <div class="feature-tooltip">
+                1.20.1 Forge.
+                <br>
+                A mod to remove the combat cooldown for 1.8 PvP feel.
+              </div>
+            </div>
+          </div>
+          <a href="https://github.com/Slavik-85/ModsWebsite/raw/refs/heads/main/nocooldown-1.0.0.jar" class="download-button" download>
+            Download
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M5 21h14M12 3v16M8 17l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <h2 class="more-mods">More mods on the way!</h2>
+    </div>
+  </section>
+
+  <script>
+    function isMobileDevice() {
+      return (window.innerWidth <= 768 && window.innerWidth / window.innerHeight !== 1) ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBrowser|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Handle mobile detection immediately on load
+    if (isMobileDevice()) {
+      const elementsToRemove = [
+        '.scroll-arrow',
+        '.features',
+      ];
+
+      elementsToRemove.forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) element.remove();
+      });
+    }
+
+    // Improved scroll arrow visibility
+    const scrollArrow = document.querySelector('.scroll-arrow');
+
+    if (scrollArrow) {
+      scrollArrow.addEventListener('click', () => {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth'
+        });
+      });
+
+      let lastScrollPosition = 0;
+      let isScrollingTimeout;
+
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+
+        clearTimeout(isScrollingTimeout);
+
+        if (currentScroll <= 50) {
+          scrollArrow.classList.add('visible');
+          scrollArrow.classList.remove('hidden');
+        } else {
+          scrollArrow.classList.remove('visible');
+          scrollArrow.classList.add('hidden');
+        }
+
+        isScrollingTimeout = setTimeout(() => {
+          if (currentScroll < lastScrollPosition && currentScroll > 50) {
+            scrollArrow.classList
+          }
+        }, 100);
+      });
+    }
+  </script>
+</body>
+
+</html>
